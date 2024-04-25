@@ -2,6 +2,10 @@ import 'hardhat-typechain'
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
 import '@nomiclabs/hardhat-etherscan'
+import 'hardhat-deploy'
+
+const fs = require('fs');
+const private_key = fs.readFileSync('.secret').toString().trim();
 
 export default {
   networks: {
@@ -44,6 +48,15 @@ export default {
     bnb: {
       url: `https://bsc-dataseed.binance.org/`,
     },
+    serenity: {
+      url: 'https://jsonrpc.serenity.aura.network',
+      chainId: 1236,
+      gasPrice: 'auto',
+      accounts: [private_key],
+      gas: 20000000,
+      timeout: 120000,
+      throwOnTransactionFailures: true,
+    },
   },
   etherscan: {
     // Your API key for Etherscan
@@ -64,5 +77,16 @@ export default {
         bytecodeHash: 'none',
       },
     },
+  },
+  // for hardhat-deploy
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
+  },
+  paths: {
+    deploy: 'scripts',
+    deployments: 'deployments',
+    imports: 'imports',
   },
 }
